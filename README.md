@@ -40,9 +40,7 @@ Alternatively, the project can be imported into an existing project as a module.
   Player webAudioPlayer = new WebAudioPlayer(callback);
   Player localAudioPlayer = new LocalAudioPlayer(callback);
 
-
   List<QTrack> tracks = new ArrayList<>();
-
 
   Track track = new Track();
   track.title = "My Track":
@@ -53,7 +51,6 @@ Alternatively, the project can be imported into an existing project as a module.
   tracks.add(track);
 
   // ... add more tracks ...
-
 
   QEventListener listener = ... ;
 
@@ -208,8 +205,7 @@ public class AndroidLog extends DefaultLog {
 
 #### Error Handling
 
-The library will break itself quickly if states aren't handled properly or something is done that shouldn't be. Many
-there are several cases where an `IllegalStateException` is thrown intentionally so that a user can fix an issue before
+The library will break itself quickly if states aren't handled properly or something is done that shouldn't be. There are several cases where an `IllegalStateException` is thrown intentionally so that a user can fix an issue before
 it becomes problematic. If this is more irritating than helpful, most of the exceptions can be logged instead of being
 thrown.
 
@@ -224,10 +220,12 @@ To utilize this behavior, when declaring log preferences:
 This project is distributed as open source software under the MIT License. Please see the LICENSE file for more info.
 
 #### Bugs, Feature requests
+
 Found a bug? Something that's missing? Feedback is an important part of improving the project, so
 please [open an issue](https://github.com/lubecjac/Q/issues).
 
 #### Code
+
 Fork this project and start working on your own feature branch. When you're done, send a Pull Request
 to have your suggested changes merged into the master branch by the project's collaborators.
 Read more about the [GitHub flow](https://guides.github.com/introduction/flow/).

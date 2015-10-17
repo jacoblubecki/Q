@@ -22,24 +22,16 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q;
+package com.jlubecki.q.logging;
 
 /**
- * Describes how the Q should loop tracks.
+ * Logging interface which makes it easy to implement different logging for different platforms, libraries, etc.
  */
-public enum Loop {
-    /**
-     * No looping.
-     */
-    NONE,
+@SuppressWarnings("InterfaceNamingConvention")
+public interface Logger {
+    void log(int priority, String tag, String message);
 
-    /**
-     * Replay the current tracks.
-     */
-    SINGLE,
+    void log(String tag, String message);
 
-    /**
-     * Replay the list of tracks.
-     */
-    LIST
+    void log(String message);
 }

@@ -22,60 +22,35 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.playback;
+package com.jlubecki.q.logging;
 
 /**
- * Used to track the state of a player.
+ * Simple implementation of {@link Logger} that uses {@link System#out} to print log messages.
  */
-public enum PlayerState {
-    /**
-     * A player was created.
-     */
-    CREATED("created"),
+@SuppressWarnings({"UseOfSystemOutOrSystemErr", "ClassWithoutConstructor", "PublicConstructor", "DesignForExtension"})
+public class DefaultLog implements Logger {
 
-    /**
-     * {@link Player#prepare(String)} ()} was called.
-     */
-    PREPARING("preparing"),
+    private static final int NO_PRIORITY = -1;
 
-    /**
-     * {@link Player#prepare(String)} ()} finished.
-     */
-    PREPARED("prepared"),
+    @Override
+    public void log(int priority, String tag, String message) {
+        switch (priority) {
+            case NO_PRIORITY:
+                System.out.printf("%d/%s: %s%n", priority, tag, message);
+                break;
 
-    /**
-     * {@link Player#play()} was called.
-     */
-    PLAYING("playing"),
-
-    /**
-     * {@link Player#pause()} was called.
-     */
-    PAUSED("paused"),
-
-    /**
-     * {@link Player#stop()} was called.
-     */
-    STOPPED("stopped"),
-
-    /**
-     * {@link Player#release()} was called.
-     */
-    RELEASED("released"),
-
-    /**
-     * The state of a player once a track ends.
-     */
-    TRACK_ENDED("track ended");
-
-    private final String state;
-
-    PlayerState(String state) {
-        this.state = state;
+            default:
+                System.out.printf("%s: %s%n", tag, message);
+        }
     }
 
     @Override
-    public String toString() {
-        return state;
+    public void log(String tag, String message) {
+        log(NO_PRIORITY, tag, message);
+    }
+
+    @Override
+    public void log(String message) {
+        log(NO_PRIORITY, "", message);
     }
 }

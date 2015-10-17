@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.playback;
+package com.jlubecki.q.playback;
 
-import com.lubecki.q.logging.LogLevel;
-import com.lubecki.q.logging.QLog;
+import com.jlubecki.q.logging.QLog;
+import com.jlubecki.q.logging.LogLevel;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -47,11 +47,13 @@ public abstract class Player {
         changeState(PlayerState.CREATED);
     }
 
+    //region Abstract methods
+
     /**
      * Prepares a track for playback. Call {@link #notifyIfPrepared()} when this method reaches its endpoint (whether
      * synchronous or asynchronous).
      *
-     * @param uri The URI of the track to prepare.
+     * @param uri the URI of the track to prepare.
      */
     public abstract void prepare(String uri);
 
@@ -64,7 +66,7 @@ public abstract class Player {
     /**
      * Seeks to a specified time during the track.
      *
-     * @param time The time to seek to in milliseconds.
+     * @param time the time to seek to in milliseconds.
      */
     public abstract void seekTo(int time);
 
@@ -81,6 +83,10 @@ public abstract class Player {
      * @return the duration of the active track in milliseconds.
      */
     public abstract int getDuration();
+
+    //endregion
+
+    //region Playback methods
 
     public void play() {
         if (canPlay()) {
@@ -119,6 +125,27 @@ public abstract class Player {
         this.playerEventCallback = null;
     }
 
+    //endregion
+
+    //region State Changes
+
+    /**
+     * Changes the state of the player.
+     *
+     * @param state the new state of the player.
+     */
+    protected void changeState(PlayerState state) {
+        PlayerState previousState = this.state;
+
+        this.state = state;
+
+        postPlayerEvent(state, "Previous state: " + previousState);
+    }
+
+    public PlayerState getState() {
+        return state;
+    }
+
     public void notifyIfPrepared() {
         if (state == PlayerState.PREPARING) {
             changeState(PlayerState.PREPARED);
@@ -136,6 +163,10 @@ public abstract class Player {
         }
     }
 
+    //endregion
+
+    //region Private Methods
+
     private boolean canPlay() {
         return state == PlayerState.PREPARED ||
                 state == PlayerState.PAUSED;
@@ -144,23 +175,6 @@ public abstract class Player {
     private boolean canPause() {
         return state == PlayerState.PLAYING ||
                 state == PlayerState.PREPARING;
-    }
-
-    /**
-     * Should only be overridden to add logging functionality. For the most part though, the Q should handle logging.
-     *
-     * @param state The new state of the player.
-     */
-    protected void changeState(PlayerState state) {
-        PlayerState previousState = this.state;
-
-        this.state = state;
-
-        postPlayerEvent(state, "Previous state: " + previousState);
-    }
-
-    public PlayerState getState() {
-        return state;
     }
 
     private void postPlayerEvent(@NotNull PlayerState event, String info) {
@@ -183,4 +197,6 @@ public abstract class Player {
                 QLog.getLogLevel() == LogLevel.BASIC ||
                 QLog.getLogLevel() == LogLevel.PLAYER;
     }
+
+    //endregion
 }

@@ -22,11 +22,11 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.playback;
+package com.jlubecki.q.playback;
 
-import com.lubecki.q.QTrack;
-import com.lubecki.q.logging.LogLevel;
-import com.lubecki.q.logging.QLog;
+import com.jlubecki.q.QTrack;
+import com.jlubecki.q.logging.LogLevel;
+import com.jlubecki.q.logging.QLog;
 import org.intellij.lang.annotations.RegExp;
 
 import java.util.HashMap;

@@ -22,35 +22,60 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q;
+package com.jlubecki.q.playback;
 
 /**
- * Class which describes a track that can be handled by the Q.
+ * Used to track the state of a player.
  */
-public class QTrack {
+public enum PlayerState {
+    /**
+     * A player was created.
+     */
+    CREATED("created"),
 
     /**
-     * Track title.
+     * {@link Player#prepare(String)} ()} was called.
      */
-    public String title;
+    PREPARING("preparing"),
 
     /**
-     * Track artist(s).
+     * {@link Player#prepare(String)} ()} finished.
      */
-    public String artist;
+    PREPARED("prepared"),
 
     /**
-     * URL, file path, etc. that describes the album artwork.
+     * {@link Player#play()} was called.
      */
-    public String image;
+    PLAYING("playing"),
 
     /**
-     * The URI used to play the track. This will be used to determine the correct player to use.
+     * {@link Player#pause()} was called.
      */
-    public String uri;
+    PAUSED("paused"),
+
+    /**
+     * {@link Player#stop()} was called.
+     */
+    STOPPED("stopped"),
+
+    /**
+     * {@link Player#release()} was called.
+     */
+    RELEASED("released"),
+
+    /**
+     * The state of a player once a track ends.
+     */
+    TRACK_ENDED("track ended");
+
+    private final String state;
+
+    PlayerState(String state) {
+        this.state = state;
+    }
 
     @Override
     public String toString() {
-        return String.format("Title: %s    Artist: %s", title, artist);
+        return state;
     }
 }

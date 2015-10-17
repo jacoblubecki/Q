@@ -1,4 +1,4 @@
-group 'com.lubecki.q'
+group 'com.jlubecki.q'
 version '0.1.0'
 
 apply plugin: 'java'

@@ -22,16 +22,41 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.logging;
+package com.jlubecki.q;
 
 /**
- * Logging interface which makes it easy to implement different logging for different platforms, libraries, etc.
+ * Class which describes a track that can be handled by the Q.
  */
-@SuppressWarnings("InterfaceNamingConvention")
-public interface Logger {
-    void log(int priority, String tag, String message);
+@SuppressWarnings("FieldNotUsedInToString")
+public class QTrack {
 
-    void log(String tag, String message);
+    /**
+     * Track title.
+     */
+    public String title;
 
-    void log(String message);
+    /**
+     * Track artist(s).
+     */
+    public String artist;
+
+    /**
+     * URL, file path, etc. that describes the album artwork.
+     */
+    public String image;
+
+    /**
+     * The URI used to play the track. This will be used to determine the correct player to use.
+     */
+    public String uri;
+
+    /**
+     * The media type of the provided track.
+     */
+    public MediaType mediaType = MediaType.DEFAULT;
+
+    @Override
+    public String toString() {
+        return String.format("Title: %s    Artist: %s", title, artist);
+    }
 }

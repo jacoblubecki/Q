@@ -22,35 +22,58 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.logging;
+package com.jlubecki.q;
 
 /**
- * Simple implementation of {@link Logger} that uses {@link System#out} to print log messages.
+ * Describes the various media types the Q should be able to handle.
  */
-@SuppressWarnings({"UseOfSystemOutOrSystemErr", "ClassWithoutConstructor", "PublicConstructor", "DesignForExtension"})
-public class DefaultLog implements Logger {
+public enum MediaType {
 
-    private static final int NO_PRIORITY = -1;
+    /**
+     * Used as the default media type for all tracks. Players that only need one media format can then ignore the
+     * {@link QTrack#mediaType} field.
+     */
+    DEFAULT("default"),
 
-    @Override
-    public void log(int priority, String tag, String message) {
-        switch (priority) {
-            case NO_PRIORITY:
-                System.out.printf("%d/%s: %s%n", priority, tag, message);
-                break;
+    /**
+     * Used for music or other plain audio formats.
+     */
+    AUDIO("audio"),
 
-            default:
-                System.out.printf("%s: %s%n", tag, message);
-        }
+    /**
+     * Used for any type of playable video.
+     */
+    VIDEO("video"),
+
+    /**
+     * Used for live streamed audio content. (i.e. online radio, live podcasts, etc.)
+     */
+    STREAM_AUDIO("stream audio"),
+
+    /**
+     * Used for live streamed video content.
+     */
+    STREAM_VIDEO("stream video"),
+
+    /**
+     * Used for images. Doubt this is useful, but now the option is there.
+     */
+    IMAGE("image"),
+
+    /**
+     * Describes anything that can be described with a {@link com.jlubecki.q.playback.Player} but doesn't necessarily
+     * match any of the explicitly provided media types.
+     */
+    OTHER("other");
+
+    private String type;
+
+    MediaType(String type) {
+        this.type = type;
     }
 
     @Override
-    public void log(String tag, String message) {
-        log(NO_PRIORITY, tag, message);
-    }
-
-    @Override
-    public void log(String message) {
-        log(NO_PRIORITY, "", message);
+    public String toString() {
+        return type;
     }
 }

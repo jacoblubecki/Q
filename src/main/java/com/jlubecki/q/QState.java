@@ -22,11 +22,62 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q;
+package com.jlubecki.q;
+
+import java.util.List;
 
 /**
- * Created by Jacob on 10/16/15.
+ * Describes the state of the overall Q. Player state is managed separately.
  */
-public interface QEventListener {
-    void onEvent(QState state);
+public enum QState {
+    /**
+     * {@link Q#getInstance()} was called.
+     */
+    CREATED("created"),
+
+    /**
+     * {@link Q#setTrackList(List)} was called and the list was not empty.
+     */
+    NOT_EMPTY("not empty"),
+
+    /**
+     * {@link Q#start()} was called.
+     */
+    STARTING("starting"),
+
+    /**
+     * {@link Q#start()} was called and playback started, or {@link Q#play()} was called.
+     */
+    PLAYING("playing"),
+
+    /**
+     * {@link Q#pause()} was called.
+     */
+    PAUSED("paused"),
+
+    /**
+     * {@link Q#stop()} was called.
+     */
+    STOPPED("stopped"),
+
+    /**
+     * The last track in the list was played and the Q isn't looping.
+     */
+    PLAYBACK_ENDED("playback ended"),
+
+    /**
+     * {@link Q#release()} was called.
+     */
+    RELEASED("released");
+
+    private final String state;
+
+    QState(String state) {
+        this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return state;
+    }
 }

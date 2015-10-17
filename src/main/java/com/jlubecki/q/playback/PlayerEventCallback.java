@@ -22,38 +22,11 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.logging;
+package com.jlubecki.q.playback;
 
 /**
- * Determines what should be logged. Illegal states will be logged for every level except {@link #NONE}.
+ * Used to track changes in the state of a {@link Player}.
  */
-public enum LogLevel {
-    /**
-     * Log nothing internally.
-     */
-    NONE,
-
-    /**
-     * Log simple info about the current state.
-     */
-    BASIC,
-
-    /**
-     * Log only items for the Q.
-     */
-    Q,
-
-    /**
-     * Log only items for the players.
-     */
-    PLAYER,
-
-    /**
-     * Log everything to its fullest extent.
-     */
-    FULL;
-
-    public boolean log() {
-        return this != NONE;
-    }
+public interface PlayerEventCallback {
+    void onEvent(PlayerState state, String info);
 }

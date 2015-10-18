@@ -25,7 +25,7 @@ This project is built using [Gradle](https://gradle.org/):
 
 1. Clone the repository: `git clone https://github.com/lubecjac/Q.git`
 2. Open and build the project.
-3. Grab the `jar` that can be found in `q/build/libs/q-0.1.0.jar` and include it in your application
+3. Grab the `jar` that can be found in `q/build/libs/q-0.1.1.jar` and include it in your application
 
 Alternatively, the project can be imported into an existing project as a module.
 

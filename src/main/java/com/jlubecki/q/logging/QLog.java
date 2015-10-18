@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.logging;
+package com.jlubecki.q.logging;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

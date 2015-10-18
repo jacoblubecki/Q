@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.playback;
+package com.jlubecki.q.playback;
 
-import com.lubecki.q.logging.LogLevel;
-import com.lubecki.q.logging.QLog;
+import com.jlubecki.q.logging.QLog;
+import com.jlubecki.q.logging.LogLevel;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -47,11 +47,13 @@ public abstract class Player {
         changeState(PlayerState.CREATED);
     }
 
+    //region Abstract methods
+
     /**
      * Prepares a track for playback. Call {@link #notifyIfPrepared()} when this method reaches its endpoint (whether
      * synchronous or asynchronous).
      *
-     * @param uri The URI of the track to prepare.
+     * @param uri the URI of the track to prepare.
      */
     public abstract void prepare(String uri);
 
@@ -64,7 +66,7 @@ public abstract class Player {
     /**
      * Seeks to a specified time during the track.
      *
-     * @param time The time to seek to in milliseconds.
+     * @param time the time to seek to in milliseconds.
      */
     public abstract void seekTo(int time);
 
@@ -82,6 +84,13 @@ public abstract class Player {
      */
     public abstract int getDuration();
 
+    //endregion
+
+    //region Playback methods
+
+    /**
+     * Used to start playing a track.
+     */
     public void play() {
         if (canPlay()) {
             changeState(PlayerState.PLAYING);
@@ -96,6 +105,9 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Used to pause a track.
+     */
     public void pause() {
         if (canPause()) {
             changeState(PlayerState.PAUSED);
@@ -110,46 +122,30 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Used to stop a player.
+     */
     public void stop() {
         changeState(PlayerState.STOPPED);
     }
 
+    /**
+     * Used to release a player's resources. This is automatically called by
+     * {@link PlayerManager#unregisterPlayer(String)} or {@link PlayerManager#removeAllPlayers()}.
+     */
     public void release() {
         changeState(PlayerState.RELEASED);
         this.playerEventCallback = null;
     }
 
-    public void notifyIfPrepared() {
-        if (state == PlayerState.PREPARING) {
-            changeState(PlayerState.PREPARED);
-        } else {
-            QLog.e("Player", "State was: " + state + ". " +
-                    "The track could not have just finished preparing.");
-        }
-    }
+    //endregion
 
-    public void notifyIfTrackEnded() {
-        if (state == PlayerState.PLAYING) {
-            changeState(PlayerState.TRACK_ENDED);
-        } else {
-            QLog.e("Player", "State was: " + state + ". The track could not have ended.");
-        }
-    }
-
-    private boolean canPlay() {
-        return state == PlayerState.PREPARED ||
-                state == PlayerState.PAUSED;
-    }
-
-    private boolean canPause() {
-        return state == PlayerState.PLAYING ||
-                state == PlayerState.PREPARING;
-    }
+    //region State Changes
 
     /**
-     * Should only be overridden to add logging functionality. For the most part though, the Q should handle logging.
+     * Changes the state of the player.
      *
-     * @param state The new state of the player.
+     * @param state the new state of the player.
      */
     protected void changeState(PlayerState state) {
         PlayerState previousState = this.state;
@@ -159,10 +155,68 @@ public abstract class Player {
         postPlayerEvent(state, "Previous state: " + previousState);
     }
 
+    /**
+     * @return the current state of the player.
+     */
     public PlayerState getState() {
         return state;
     }
 
+    /**
+     * Checks that the player is prepared, then fires an event with the {@link PlayerEventCallback} to say the player is
+     * prepared for playback.
+     */
+    public void notifyIfPrepared() {
+        if (state == PlayerState.PREPARING) {
+            changeState(PlayerState.PREPARED);
+        } else {
+            QLog.e(this.getClass().getSimpleName(), "State was: " + state + ". " +
+                    "The track could not have just finished preparing.");
+        }
+    }
+
+    /**
+     * Checks that the player finished playing a track, then fires an event with the {@link PlayerEventCallback} to say
+     * the player is done with the track it was playing.
+     */
+    public void notifyIfTrackEnded() {
+        if (state == PlayerState.PLAYING) {
+            changeState(PlayerState.TRACK_ENDED);
+        } else {
+            QLog.e(this.getClass().getSimpleName(), "State was: " + state + ". The track could not have ended.");
+        }
+    }
+
+    //endregion
+
+    //region Private Methods
+
+    /**
+     * Helper method to check for a valid state prior to playing.
+     *
+     * @return true if the current state should let the Player begin playback.
+     */
+    private boolean canPlay() {
+        return state == PlayerState.PREPARED ||
+                state == PlayerState.PAUSED;
+    }
+
+    /**
+     * Helper method to check for a valid state prior ro pausing.
+     *
+     * @return true if the current state should let the Player pause.
+     */
+    private boolean canPause() {
+        return state == PlayerState.PLAYING ||
+                state == PlayerState.PREPARING;
+    }
+
+    /**
+     * Helper method that posts playback state changes.
+     *
+     * @param event the new {@link PlayerState} of the Player.
+     * @param info a string with additional info about the state change. Used for logging.
+     */
     private void postPlayerEvent(@NotNull PlayerState event, String info) {
         if (playerEventCallback != null) {
             playerEventCallback.onEvent(event, info);
@@ -183,4 +237,6 @@ public abstract class Player {
                 QLog.getLogLevel() == LogLevel.BASIC ||
                 QLog.getLogLevel() == LogLevel.PLAYER;
     }
+
+    //endregion
 }

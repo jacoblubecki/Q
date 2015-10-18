@@ -22,62 +22,24 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q;
-
-import java.util.List;
+package com.jlubecki.q;
 
 /**
- * Describes the state of the overall Q. Player state is managed separately.
+ * Describes how the Q should loop tracks.
  */
-public enum QState {
+public enum Loop {
     /**
-     * {@link Q#getInstance()} was called.
+     * No looping.
      */
-    CREATED("created"),
-
-    /**
-     * {@link Q#setTrackList(List)} was called and the list was not empty.
-     */
-    NOT_EMPTY("not empty"),
+    NONE,
 
     /**
-     * {@link Q#start()} was called.
+     * Replay the current tracks.
      */
-    STARTING("starting"),
+    SINGLE,
 
     /**
-     * {@link Q#start()} was called and playback started, or {@link Q#play()} was called.
+     * Replay the list of tracks.
      */
-    PLAYING("playing"),
-
-    /**
-     * {@link Q#pause()} was called.
-     */
-    PAUSED("paused"),
-
-    /**
-     * {@link Q#stop()} was called.
-     */
-    STOPPED("stopped"),
-
-    /**
-     * The last track in the list was played and the Q isn't looping.
-     */
-    PLAYBACK_ENDED("playback ended"),
-
-    /**
-     * {@link Q#release()} was called.
-     */
-    RELEASED("released");
-
-    private final String state;
-
-    QState(String state) {
-        this.state = state;
-    }
-
-    @Override
-    public String toString() {
-        return state;
-    }
+    LIST
 }

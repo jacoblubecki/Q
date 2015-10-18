@@ -22,35 +22,46 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.logging;
+package com.jlubecki.q;
 
 /**
- * Simple implementation of {@link Logger} that uses {@link System#out} to print log messages.
+ * Class which describes a track that can be handled by the Q.
  */
-@SuppressWarnings({"UseOfSystemOutOrSystemErr", "ClassWithoutConstructor", "PublicConstructor", "DesignForExtension"})
-public class DefaultLog implements Logger {
+@SuppressWarnings("FieldNotUsedInToString")
+public class QTrack {
 
-    private static final int NO_PRIORITY = -1;
+    /**
+     * Track title.
+     */
+    public String title;
+
+    /**
+     * Track artist(s).
+     */
+    public String artist;
+
+    /**
+     * URL, file path, etc. that describes the album artwork.
+     */
+    public String imagePath;
+
+    /**
+     * Byte array that can be decoded into an image.
+     */
+    public byte[] imageData;
+
+    /**
+     * The URI used to play the track. This will be used to determine the correct player to use.
+     */
+    public String uri;
+
+    /**
+     * The media type of the provided track.
+     */
+    public MediaType mediaType = MediaType.DEFAULT;
 
     @Override
-    public void log(int priority, String tag, String message) {
-        switch (priority) {
-            case NO_PRIORITY:
-                System.out.printf("%d/%s: %s%n", priority, tag, message);
-                break;
-
-            default:
-                System.out.printf("%s: %s%n", tag, message);
-        }
-    }
-
-    @Override
-    public void log(String tag, String message) {
-        log(NO_PRIORITY, tag, message);
-    }
-
-    @Override
-    public void log(String message) {
-        log(NO_PRIORITY, "", message);
+    public String toString() {
+        return String.format("Title: %s    Artist: %s", title, artist);
     }
 }

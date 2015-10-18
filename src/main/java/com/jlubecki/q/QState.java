@@ -22,35 +22,62 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q;
+package com.jlubecki.q;
+
+import java.util.List;
 
 /**
- * Class which describes a track that can be handled by the Q.
+ * Describes the state of the overall Q. Player state is managed separately.
  */
-public class QTrack {
+public enum QState {
+    /**
+     * {@link Q#getInstance()} was called.
+     */
+    CREATED("created"),
 
     /**
-     * Track title.
+     * {@link Q#setTrackList(List)} was called and the list was not empty.
      */
-    public String title;
+    NOT_EMPTY("not empty"),
 
     /**
-     * Track artist(s).
+     * {@link Q#start()} was called.
      */
-    public String artist;
+    STARTING("starting"),
 
     /**
-     * URL, file path, etc. that describes the album artwork.
+     * {@link Q#start()} was called and playback started, or {@link Q#play()} was called.
      */
-    public String image;
+    PLAYING("playing"),
 
     /**
-     * The URI used to play the track. This will be used to determine the correct player to use.
+     * {@link Q#pause()} was called.
      */
-    public String uri;
+    PAUSED("paused"),
+
+    /**
+     * {@link Q#stop()} was called.
+     */
+    STOPPED("stopped"),
+
+    /**
+     * The last track in the list was played and the Q isn't looping.
+     */
+    PLAYBACK_ENDED("playback ended"),
+
+    /**
+     * {@link Q#release()} was called.
+     */
+    RELEASED("released");
+
+    private final String state;
+
+    QState(String state) {
+        this.state = state;
+    }
 
     @Override
     public String toString() {
-        return String.format("Title: %s    Artist: %s", title, artist);
+        return state;
     }
 }

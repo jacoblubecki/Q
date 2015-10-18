@@ -22,16 +22,23 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.logging;
+package com.jlubecki.q;
 
 /**
- * Logging interface which makes it easy to implement different logging for different platforms, libraries, etc.
+ * Used to listen for changes to the overall state of the {@link Q}.
  */
-@SuppressWarnings("InterfaceNamingConvention")
-public interface Logger {
-    void log(int priority, String tag, String message);
+public interface QEventListener {
+    /**
+     * Whenever the state of the Q changes.
+     *
+     * @param state the new {@link QState}.
+     */
+    void onEvent(QState state);
 
-    void log(String tag, String message);
-
-    void log(String message);
+    /**
+     * Whenever the media type changes.
+     *
+     * @param type the new {@link MediaType}.
+     */
+    void onMediaTypeChanged(MediaType type);
 }

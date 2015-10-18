@@ -22,11 +22,11 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q;
+package com.jlubecki.q.playback;
 
 /**
- * Created by Jacob on 10/16/15.
+ * Used to track changes in the state of a {@link Player}.
  */
-public interface QEventListener {
-    void onEvent(QState state);
+public interface PlayerEventCallback {
+    void onEvent(PlayerState state, String info);
 }

@@ -22,11 +22,60 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.playback;
+package com.jlubecki.q.playback;
 
 /**
- * Used to track changes in the state of a {@link Player}.
+ * Used to track the state of a player.
  */
-public interface PlayerEventCallback {
-    void onEvent(PlayerState state, String info);
+public enum PlayerState {
+    /**
+     * A player was created.
+     */
+    CREATED("created"),
+
+    /**
+     * {@link Player#prepare(String)} ()} was called.
+     */
+    PREPARING("preparing"),
+
+    /**
+     * {@link Player#prepare(String)} ()} finished.
+     */
+    PREPARED("prepared"),
+
+    /**
+     * {@link Player#play()} was called.
+     */
+    PLAYING("playing"),
+
+    /**
+     * {@link Player#pause()} was called.
+     */
+    PAUSED("paused"),
+
+    /**
+     * {@link Player#stop()} was called.
+     */
+    STOPPED("stopped"),
+
+    /**
+     * {@link Player#release()} was called.
+     */
+    RELEASED("released"),
+
+    /**
+     * The state of a player once a track ends.
+     */
+    TRACK_ENDED("track ended");
+
+    private final String state;
+
+    PlayerState(String state) {
+        this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return state;
+    }
 }

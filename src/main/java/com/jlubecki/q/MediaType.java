@@ -22,38 +22,58 @@
  * SOFTWARE.
  */
 
-package com.lubecki.q.logging;
+package com.jlubecki.q;
 
 /**
- * Determines what should be logged. Illegal states will be logged for every level except {@link #NONE}.
+ * Describes the various media types the Q should be able to handle.
  */
-public enum LogLevel {
-    /**
-     * Log nothing internally.
-     */
-    NONE,
+public enum MediaType {
 
     /**
-     * Log simple info about the current state.
+     * Used as the default media type for all tracks. Players that only need one media format can then ignore the
+     * {@link QTrack#mediaType} field.
      */
-    BASIC,
+    DEFAULT("default"),
 
     /**
-     * Log only items for the Q.
+     * Used for music or other plain audio formats.
      */
-    Q,
+    AUDIO("audio"),
 
     /**
-     * Log only items for the players.
+     * Used for any type of playable video.
      */
-    PLAYER,
+    VIDEO("video"),
 
     /**
-     * Log everything to its fullest extent.
+     * Used for live streamed audio content. (i.e. online radio, live podcasts, etc.)
      */
-    FULL;
+    STREAM_AUDIO("stream audio"),
 
-    public boolean log() {
-        return this != NONE;
+    /**
+     * Used for live streamed video content.
+     */
+    STREAM_VIDEO("stream video"),
+
+    /**
+     * Used for images. Doubt this is useful, but now the option is there.
+     */
+    IMAGE("image"),
+
+    /**
+     * Describes anything that can be described with a {@link com.jlubecki.q.playback.Player} but doesn't necessarily
+     * match any of the explicitly provided media types.
+     */
+    OTHER("other");
+
+    private final String type;
+
+    MediaType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return type;
     }
 }

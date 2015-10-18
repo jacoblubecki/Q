@@ -43,7 +43,12 @@ public class QTrack {
     /**
      * URL, file path, etc. that describes the album artwork.
      */
-    public String image;
+    public String imagePath;
+
+    /**
+     * Byte array that can be decoded into an image.
+     */
+    public byte[] imageData;
 
     /**
      * The URI used to play the track. This will be used to determine the correct player to use.

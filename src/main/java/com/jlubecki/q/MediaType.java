@@ -66,7 +66,7 @@ public enum MediaType {
      */
     OTHER("other");
 
-    private String type;
+    private final String type;
 
     MediaType(String type) {
         this.type = type;

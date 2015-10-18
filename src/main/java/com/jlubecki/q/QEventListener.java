@@ -25,9 +25,20 @@
 package com.jlubecki.q;
 
 /**
- * Created by Jacob on 10/16/15.
+ * Used to listen for changes to the overall state of the {@link Q}.
  */
 public interface QEventListener {
+    /**
+     * Whenever the state of the Q changes.
+     *
+     * @param state the new {@link QState}.
+     */
     void onEvent(QState state);
+
+    /**
+     * Whenever the media type changes.
+     *
+     * @param type the new {@link MediaType}.
+     */
     void onMediaTypeChanged(MediaType type);
 }

@@ -117,10 +117,12 @@ public final class Q {
 
             case Q:
             case FULL:
+                // Don't print the whole image Data array
+                String data = current.imageData != null ? "Yes" : "No";
                 message = eventName + "  ::  " +
-                        "Track: %s    Artist: %s    URI: %s    Image: %s    State: %s    Index: %d";
-                message = String.format(message, current.title, current.artist, current.uri, current.image, state,
-                        index);
+                        "Track: %s    Artist: %s    URI: %s    Image: %s    Image Data: %s    State: %s    Index: %d";
+                message = String.format(message, current.title, current.artist, current.uri, current.imagePath, data,
+                        state, index);
 
                 QLog.v(this.getClass().getSimpleName(), message);
                 break;
@@ -151,17 +153,16 @@ public final class Q {
     //region Playback
 
     private List<QTrack> tracks;
-    private List<QTrack> original;
+    private List<QTrack> original; // never modified, used to revert shuffle
     private int index;
     private QEventListener listener;
     private final PlayerManager manager;
     private QTrack current;
-    private QTrack next;
     private Loop loop = Loop.NONE;
     private QState state;
-    private MediaType mediaType;
-    private boolean resetOnPrevious = true;
-    private int minDelay = 2000;
+    private MediaType mediaType = MediaType.DEFAULT;
+    private boolean resetOnPrevious = true; // reset when previous is executed by default is past the minDelay time
+    private int minDelay = 2000; // by default, if 2 seconds pass on a track, hitting previous will reset the track
 
     //region Public Methods
 
@@ -393,6 +394,10 @@ public final class Q {
 
         manager.justPrepare(current.uri);
 
+        if(listener == null && QLog.getLogLevel() != LogLevel.PLAYER) {
+            QLog.w(this.getClass().getSimpleName(), "The QEventListener has not been set.");
+        }
+
         logPlayback("PREPARE");
     }
 
@@ -548,7 +553,7 @@ public final class Q {
      */
     private void setMediaType(MediaType mediaType) {
         // only make adjustments when media type actually changes
-        if(this.mediaType != mediaType) {
+        if (this.mediaType != mediaType) {
             this.mediaType = mediaType;
 
             logMediaType();

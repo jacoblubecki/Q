@@ -48,6 +48,9 @@ public final class PlayerManager {
         // Singleton instance.
     }
 
+    /**
+     * @return the singleton instance of the PlayerManager.
+     */
     public static synchronized PlayerManager getInstance() {
         if (instance == null) {
             instance = new PlayerManager();
@@ -55,6 +58,12 @@ public final class PlayerManager {
         return instance;
     }
 
+    /**
+     * Adds a player to PlayerManager to handle the given URI pattern.
+     *
+     * @param uriPattern the pattern to register with the PlayerManager.
+     * @param player the player associated with the pattern.
+     */
     public void registerPlayer(@RegExp String uriPattern, Player player) {
         if (players.containsKey(uriPattern)) {
             IllegalStateException exception =
@@ -71,15 +80,20 @@ public final class PlayerManager {
         }
     }
 
+    /**
+     * Removes a player from the PlayerManager that matches the given URI.
+     *
+     * @param uriPattern the URI pattern that should no longer be associated with the PlayerManager.
+     */
     public void unregisterPlayer(@RegExp String uriPattern) {
         if (players.containsKey(uriPattern)) {
-            log("Player unregistered. " +
-                    "URI: " + uriPattern + "    " +
-                    "Name: " + players.get(uriPattern).getClass().getSimpleName());
+            log(String.format("Player unregistered. URI: %s    Name: %s", uriPattern,
+                    players.get(uriPattern).getClass().getSimpleName()));
 
+            players.get(uriPattern).release();
             players.remove(uriPattern);
         } else {
-            IllegalStateException exception =  new IllegalStateException("Player was never registered.");
+            IllegalStateException exception = new IllegalStateException("Player was never registered.");
 
             if (QLog.shouldIgnoreIllegalStates()) {
                 QLog.e(exception, this.getClass().getSimpleName(), exception.getMessage());
@@ -90,7 +104,7 @@ public final class PlayerManager {
     }
 
     /**
-     * Releases all players and then clears the list of players.
+     * Releases all players and then clears the list of registered players.
      */
     public void removeAllPlayers() {
         log("All players removed.");
@@ -101,6 +115,11 @@ public final class PlayerManager {
         players.clear();
     }
 
+    /**
+     * Updates the current player in the Q. Don't call this method.
+     *
+     * @param track track that needs to be played.
+     */
     public void updatePlayer(QTrack track) {
 
         for (Entry<String, Player> stringPlayerEntry : players.entrySet()) {
@@ -124,38 +143,70 @@ public final class PlayerManager {
         }
     }
 
+    /**
+     * @return the current {@link Player} in the PlayerManager.
+     */
     public Player getCurrentPlayer() {
         return current;
     }
 
+    /**
+     * Prepares a track for immediate playback.
+     *
+     * @param uri the URI of the track to prepare.
+     */
     public void prepare(String uri) {
         current.prepare(uri);
     }
 
+    /**
+     * Prepares a track for eventual playback.
+     * @param uri the URI of the track to prepare.
+     */
     public void justPrepare(String uri) {
         current.justPrepare(uri);
     }
 
+    /**
+     * Calls {@link Player#play()} for the current {@link Player}.
+     */
     public void play() {
         current.play();
     }
 
+    /**
+     * Calls {@link Player#play()} for the current {@link Player}.
+     */
     public void pause() {
         current.pause();
     }
 
+    /**
+     * Calls {@link Player#seekTo(int)} for the current {@link Player}.
+     */
     public void seekTo(int time) {
         current.seekTo(time);
     }
 
+    /**
+     * Calls {@link Player#stop()} for the current {@link Player}.
+     */
     public void stop() {
         current.stop();
     }
 
+    /**
+     * Makes the instance of the PlayerManager null.
+     */
     public void release() {
         instance = null;
     }
 
+    /**
+     * Logs messages for this class.
+     *
+     * @param message the message to log.
+     */
     private void log(String message) {
         if (QLog.getLogLevel() == LogLevel.PLAYER || QLog.getLogLevel() == LogLevel.FULL) {
             QLog.i(this.getClass().getSimpleName(), message);
